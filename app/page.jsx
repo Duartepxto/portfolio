@@ -266,7 +266,7 @@ export default function Home() {
     const onMove = (e) => { mx = e.clientX; my = e.clientY; };
     window.addEventListener("mousemove", onMove);
     const cloop = () => {
-      cx += (mx - cx) * 0.2; cy += (my - cy) * 0.2; sShow += (sT - sShow) * 0.2;
+      cx += (mx - cx) * 0.4; cy += (my - cy) * 0.4; sShow += (sT - sShow) * 0.3;
       if (cur) cur.style.transform = `translate(${cx}px,${cy}px) translate(-50%,-50%) scale(${sShow})`;
       craf = requestAnimationFrame(cloop);
     };
@@ -411,7 +411,7 @@ export default function Home() {
             {/* INTRO */}
             <section data-panel="0" data-sec="01 — Introdução" data-line="#b15a36" data-wopac="0.3" style={{ position: "relative", flex: "0 0 100vw", height: "100%", background: "#f3efe6", display: "flex", flexDirection: "column", justifyContent: "center", padding: "0 5vw", overflow: "hidden" }}>
               <WaveLines color="#b15a36" opacity={0.3} offset={0} />
-              <div data-px="-30" className="deco" style={{ position: "absolute", right: "-2vw", top: "50%", transform: "translateY(-50%)", width: "38vh", height: "38vh", borderRadius: "50%", border: "1px solid rgba(177,90,54,.35)", display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
+              <div data-px="-30" className="hero-ring" style={{ position: "absolute", right: "-2vw", top: "50%", transform: "translateY(-50%)", width: "38vh", height: "38vh", borderRadius: "50%", border: "1px solid rgba(177,90,54,.35)", display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
                 <div style={{ width: "62%", height: "62%", borderRadius: "50%", border: "1px solid rgba(177,90,54,.5)", animation: "spin 18s linear infinite", position: "relative" }}>
                   <span style={{ position: "absolute", top: -5, left: "50%", width: 9, height: 9, borderRadius: "50%", background: "#b15a36" }} />
                 </div>

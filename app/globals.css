@@ -275,6 +275,15 @@ a {
   to { transform: scaleX(1); }
 }
 
+/* on real-mouse devices hide the native cursor — only the custom ball shows */
+@media (hover: hover) and (pointer: fine) {
+  *,
+  *::before,
+  *::after {
+    cursor: none !important;
+  }
+}
+
 @media (max-width: 768px) {
   #cursor { display: none !important; }
   #grain { opacity: 0.28; }
@@ -282,6 +291,13 @@ a {
   .hbar,
   .deslize-hint,
   .deco { display: none !important; }
+  /* keep the hero orbit ring on mobile, but small + faint in the background */
+  .hero-ring {
+    opacity: 0.4 !important;
+    width: 27vh !important;
+    height: 27vh !important;
+    right: -7vw !important;
+  }
 
   /* ---- main page: vertical stack instead of horizontal track ---- */
   #wrap { height: auto !important; }
