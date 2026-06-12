@@ -29,6 +29,13 @@ const PROJECTS = [
 const PF = "'Playfair Display', Georgia, serif";
 const HG = "'Hanken Grotesk', sans-serif";
 
+// SVG arrows so they never render as colour emoji on some phones (↗/→)
+const Arrow = ({ s = 13, dir = "ur" }) => (
+  <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ display: "block" }}>
+    {dir === "ur" ? (<><path d="M7 17 17 7" /><path d="M8 7h9v9" /></>) : (<><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></>)}
+  </svg>
+);
+
 const rgba = (hex, a) => {
   const h = hex.replace("#", "");
   const f = h.length === 3 ? h.split("").map((c) => c + c).join("") : h;
@@ -366,7 +373,7 @@ export default function Home() {
             <span className="lmask"><span className="lline lline-it">Peixoto</span></span>
           </h2>
           <div className="loader-bar"><i /></div>
-          <div className="loader-sub"><span>Designer · Developer · Braga</span></div>
+          <div className="loader-sub"><span>Developer · Estudante · Braga</span></div>
         </div>
       </div>
 
@@ -410,7 +417,7 @@ export default function Home() {
                 </div>
               </div>
               <div style={{ position: "relative", zIndex: 2, maxWidth: 1100 }}>
-                <div style={{ marginBottom: 18 }}><div data-intro="0" style={{ fontFamily: HG, fontSize: 13, letterSpacing: ".2em", textTransform: "uppercase", color: "#8a8377", fontWeight: 500 }}>Designer · Developer · Braga</div></div>
+                <div style={{ marginBottom: 18 }}><div data-intro="0" style={{ fontFamily: HG, fontSize: 13, letterSpacing: ".2em", textTransform: "uppercase", color: "#8a8377", fontWeight: 500 }}>Developer · Estudante · Braga</div></div>
                 <h1 style={{ fontFamily: PF, fontWeight: 500, lineHeight: ".9", letterSpacing: "-.01em", fontSize: "clamp(60px,11vw,200px)" }}>
                   <span style={{ display: "block" }}><span data-intro="1" style={{ display: "block" }}>Duarte</span></span>
                   <span style={{ display: "block" }}><span data-intro="2" style={{ display: "block", fontStyle: "italic", fontWeight: 400, color: "#b15a36", fontSize: "clamp(82px,15.5vw,300px)", lineHeight: ".82", marginTop: "-.02em" }}>Peixoto.</span></span>
@@ -436,9 +443,9 @@ export default function Home() {
                 <div style={{ flex: 1, maxWidth: 680 }}>
                   <div style={{ fontFamily: HG, fontSize: 12, letterSpacing: ".16em", textTransform: "uppercase", color: "#b15a36", marginBottom: 26, fontWeight: 500 }}>(02) — Sobre mim</div>
                   <p style={{ fontFamily: PF, fontWeight: 400, fontSize: "clamp(28px,3.4vw,56px)", lineHeight: 1.1, letterSpacing: "-.005em" }}>Crio onde forma, movimento e <span style={{ fontStyle: "italic", color: "#b15a36" }}>detalhe</span> se encontram.</p>
-                  <p style={{ marginTop: 30, maxWidth: 500, fontSize: 16, lineHeight: 1.65, color: "#56514a" }}>Developer e designer autodidata de Braga. Crio experiências digitais com personalidade — do conceito ao código, onde tipografia, movimento e interação trabalham juntos. Fora do código, exploro edição de foto e vídeo e modelação 3D a nível pessoal.</p>
+                  <p style={{ marginTop: 30, maxWidth: 520, fontSize: 16, lineHeight: 1.65, color: "#56514a" }}>Estudante e developer autodidata de Braga, apaixonado por programação — do front-end (React, Next.js) ao back-end (C# / .NET), bases de dados e integração de IA. Gosto de levar uma ideia do conceito ao deploy. Fora do ecrã faço downhill (MTB) — foi daí que nasceu o Fast Lane. À parte, exploro design, edição de foto e vídeo e modelação 3D, tudo a nível pessoal.</p>
                   <div style={{ marginTop: 34, display: "flex", flexWrap: "wrap", gap: 9, fontFamily: HG, fontSize: 12 }}>
-                    {["Web / React", "UI / UX", "Motion", "Edição foto · vídeo", "Modelação 3D"].map((t) => (
+                    {["React / Next.js", "C# / .NET", "UI / UX", "Foto · Vídeo", "3D"].map((t) => (
                       <span key={t} style={{ border: "1px solid rgba(28,26,22,.22)", borderRadius: 40, padding: "8px 16px", textTransform: "uppercase" }}>{t}</span>
                     ))}
                   </div>
@@ -471,7 +478,7 @@ export default function Home() {
                   <div style={{ flex: 1 }}>
                     <div style={{ fontFamily: HG, fontSize: 12, letterSpacing: ".1em", textTransform: "uppercase", color: p.catColor, marginBottom: 16, fontWeight: 500 }}>{p.cat}</div>
                     <h3 className="proj-title" style={{ fontFamily: PF, fontWeight: 500, fontSize: "clamp(44px,5.5vw,104px)", lineHeight: ".95" }}>{p.title}</h3>
-                    <div style={{ marginTop: 26, display: "inline-flex", alignItems: "center", gap: 12, fontFamily: HG, fontSize: 13, letterSpacing: ".04em" }}>Ver peça <span className="proj-arrow" style={{ display: "inline-flex", width: 34, height: 34, borderRadius: "50%", border: `1px solid ${p.arrowBorder}`, alignItems: "center", justifyContent: "center" }}>↗</span></div>
+                    <div style={{ marginTop: 26, display: "inline-flex", alignItems: "center", gap: 12, fontFamily: HG, fontSize: 13, letterSpacing: ".04em" }}>Ver peça <span className="proj-arrow" style={{ display: "inline-flex", width: 34, height: 34, borderRadius: "50%", border: `1px solid ${p.arrowBorder}`, alignItems: "center", justifyContent: "center" }}><Arrow s={13} dir="ur" /></span></div>
                   </div>
                 </div>
               </section>
@@ -485,7 +492,7 @@ export default function Home() {
                 <div style={{ fontFamily: HG, fontSize: 12, letterSpacing: ".16em", textTransform: "uppercase", color: "#d98a64", marginBottom: 28, fontWeight: 500 }}>(04) — Vamos trabalhar</div>
                 <h2 style={{ fontFamily: PF, fontWeight: 500, fontSize: "clamp(56px,10vw,200px)", lineHeight: ".9", letterSpacing: "-.01em" }}>Vamos criar<span style={{ fontStyle: "italic", color: "#b15a36" }}>.</span></h2>
                 <div style={{ marginTop: 46, display: "flex", alignItems: "center", gap: 34, flexWrap: "wrap" }}>
-                  <a href="mailto:duartepxto@gmail.com" data-cursor="link" style={{ display: "inline-flex", alignItems: "center", gap: 14, background: "#f3efe6", color: "#1c1a16", fontFamily: HG, fontWeight: 500, fontSize: "clamp(15px,1.5vw,19px)", padding: "18px 30px", borderRadius: 50 }}>duartepxto@gmail.com <span style={{ display: "inline-flex", width: 26, height: 26, borderRadius: "50%", background: "#b15a36", color: "#f3efe6", alignItems: "center", justifyContent: "center" }}>↗</span></a>
+                  <a href="mailto:duartepxto@gmail.com" data-cursor="link" style={{ display: "inline-flex", alignItems: "center", gap: 14, background: "#f3efe6", color: "#1c1a16", fontFamily: HG, fontWeight: 500, fontSize: "clamp(15px,1.5vw,19px)", padding: "18px 30px", borderRadius: 50 }}>duartepxto@gmail.com <span style={{ display: "inline-flex", width: 26, height: 26, borderRadius: "50%", background: "#b15a36", color: "#f3efe6", alignItems: "center", justifyContent: "center" }}><Arrow s={12} dir="ur" /></span></a>
                   <div style={{ display: "flex", gap: 22, fontFamily: HG, fontSize: 14 }}>
                     <a href="https://github.com/Duartepxto" target="_blank" rel="noopener noreferrer" data-cursor="link" className="social-link">GitHub ↗</a>
                     <a href="https://www.linkedin.com/in/duarte-peixoto-b96189397" target="_blank" rel="noopener noreferrer" data-cursor="link" className="social-link">LinkedIn ↗</a>
@@ -555,7 +562,7 @@ export default function Home() {
                 const L = GLAYOUT[i % GLAYOUT.length];
                 const portrait = (g.o || "l") === "p";
                 return (
-                  <div key={i} className="gitem" style={{ flex: "0 0 auto", transform: `translateY(${L.y}vh)`, display: "flex", flexDirection: "column", gap: 14 }}>
+                  <div key={i} className={`gitem ${portrait ? "gitem--p" : "gitem--l"}`} style={{ flex: "0 0 auto", transform: `translateY(${L.y}vh)`, display: "flex", flexDirection: "column", gap: 14 }}>
                     <span className="gcap" style={{ fontFamily: HG, fontSize: 11, letterSpacing: ".18em", textTransform: "uppercase", color: "#8a8377", fontWeight: 500 }}>{g.label || `${cur.title} · ${g.code}`}</span>
                     <figure className="gshot" style={{ margin: 0, height: `${L.h}vh`, aspectRatio: portrait ? "9 / 19.5" : "16 / 10", borderRadius: 6, overflow: "hidden", border: "1px solid rgba(28,26,22,.1)", background: "#e7e0d2", display: "flex", alignItems: "center", justifyContent: "center" }}>
                       {g.src ? (
@@ -589,7 +596,7 @@ export default function Home() {
             <WaveLines color="#b15a36" opacity={0.2} offset={360} />
             <div style={{ fontFamily: HG, fontSize: 12, letterSpacing: ".14em", textTransform: "uppercase", color: "#8a8377", marginBottom: 18 }}>Próxima peça</div>
             <div style={{ fontFamily: PF, fontWeight: 500, fontSize: "clamp(48px,8vw,140px)", lineHeight: ".95" }}>{nextTitle}</div>
-            <div style={{ marginTop: 28, display: "inline-flex", alignItems: "center", gap: 14, fontFamily: HG, fontSize: 14 }}>Ver peça <span style={{ display: "inline-flex", width: 40, height: 40, borderRadius: "50%", background: "#1c1a16", color: "#f3efe6", alignItems: "center", justifyContent: "center" }}>→</span></div>
+            <div style={{ marginTop: 28, display: "inline-flex", alignItems: "center", gap: 14, fontFamily: HG, fontSize: 14 }}>Ver peça <span style={{ display: "inline-flex", width: 40, height: 40, borderRadius: "50%", background: "#1c1a16", color: "#f3efe6", alignItems: "center", justifyContent: "center" }}><Arrow s={16} dir="r" /></span></div>
           </section>
         </div>
       )}

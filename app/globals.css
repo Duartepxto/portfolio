@@ -91,6 +91,7 @@ a {
   flex-shrink: 0;
   position: relative;
   isolation: isolate;
+  overflow: hidden; /* clip the background lines so they don't extend the scroll width */
 }
 @keyframes overlayIn {
   from { opacity: 0; }
@@ -325,17 +326,19 @@ a {
   }
   #projpanel > section.dpanel + section.dpanel { border-top: 1px solid rgba(28, 26, 22, 0.08); }
 
-  /* gallery -> horizontal swipe strip inside the vertical overlay */
+  /* gallery -> clean vertical stack inside the vertical overlay (no sideways scroll) */
   .gallery {
+    flex-direction: column !important;
     height: auto !important;
-    overflow-x: auto;
-    overflow-y: hidden;
+    overflow: hidden !important;
     justify-content: flex-start !important;
     align-items: center !important;
-    padding: 5vh 8vw !important;
-    gap: 4vw !important;
-    -webkit-overflow-scrolling: touch;
+    padding: 6vh 7vw !important;
+    gap: 4.5vh !important;
   }
-  .gallery .gitem { transform: none !important; }
-  .gallery .gshot { height: 42vh !important; }
+  .gallery .gitem { transform: none !important; width: auto !important; max-width: 100%; align-items: center; }
+  .gallery .gitem--l { width: 100% !important; }
+  .gallery .gitem--l .gshot { width: 100% !important; height: auto !important; }
+  .gallery .gitem--p .gshot { height: 58vh !important; width: auto !important; max-width: 100%; }
+  .gallery .gcap { align-self: flex-start; }
 }

@@ -34,3 +34,5 @@ next-env.d.ts
 # original design export (reference only)
 /_original-design
 /.capture
+
+.vercel
