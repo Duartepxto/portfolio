@@ -65,12 +65,15 @@ const WAVES = {
 // wavy lines that span the whole track; `offset` (in vw) shifts the same pattern so
 // each panel shows its own slice and the lines stay continuous across panel borders.
 // Sits BEHIND the panel content (z-index:-1) so photos and text are always on top.
-function WaveLines({ color, opacity = 0.4, offset = 0 }) {
+function WaveLines({ color, opacity = 0.4, offset = 0, sparse = false }) {
+  const groups = sparse
+    ? [["wave1", WAVES.g1]]
+    : [["wave1", WAVES.g1], ["wave2", WAVES.g2], ["wave3", WAVES.g3]];
   return (
     <svg className="waves" viewBox={`0 0 ${TOTAL_VW} 100`} preserveAspectRatio="none" aria-hidden="true" style={{ opacity, left: `${-offset}vw`, width: `${TOTAL_VW}vw` }}>
-      <g className="wave wave1" stroke={color}>{WAVES.g1.map((d, i) => <path key={i} d={d} />)}</g>
-      <g className="wave wave2" stroke={color}>{WAVES.g2.map((d, i) => <path key={i} d={d} />)}</g>
-      <g className="wave wave3" stroke={color}>{WAVES.g3.map((d, i) => <path key={i} d={d} />)}</g>
+      {groups.map(([cls, paths]) => (
+        <g key={cls} className={`wave ${cls}`} stroke={color}>{paths.map((d, i) => <path key={i} d={d} />)}</g>
+      ))}
     </svg>
   );
 }
@@ -325,13 +328,25 @@ export default function Home() {
         if (r.left < vw * 0.92 && r.right > vw * 0.05) s.classList.add("in");
       });
     };
+    // align the background lines across the overlay panels so they connect (like the main page)
+    const alignLines = () => {
+      if (window.innerWidth <= 768) return;
+      const vw = window.innerWidth;
+      const totalVw = (root.scrollWidth / vw) * 100;
+      root.querySelectorAll(".dpanel .waves").forEach((w) => {
+        const panel = w.closest(".dpanel");
+        if (panel) { w.style.left = `${-((panel.offsetLeft / vw) * 100)}vw`; w.style.width = `${totalVw}vw`; }
+      });
+    };
     const t = setTimeout(() => {
       shots = Array.from(root.querySelectorAll(".gshot"));
       if (window.innerWidth <= 768) { shots.forEach((s) => s.classList.add("in")); return; }
       reveal();
       root.addEventListener("scroll", reveal, { passive: true });
-    }, 80);
-    return () => { clearTimeout(t); root.removeEventListener("scroll", reveal); };
+      alignLines();
+    }, 90);
+    window.addEventListener("resize", alignLines);
+    return () => { clearTimeout(t); root.removeEventListener("scroll", reveal); window.removeEventListener("resize", alignLines); };
   }, [open]);
 
   const goPanel = (idx) => {
@@ -521,7 +536,7 @@ export default function Home() {
 
           {/* PANEL 1 — title, lead, tech pills, meta */}
           <section className="dpanel" style={{ flex: "0 0 88vw", height: "100vh", display: "flex", flexDirection: "column", justifyContent: "center", padding: "0 5vw", position: "relative" }}>
-            <WaveLines color="#b15a36" opacity={0.22} offset={0} />
+            <WaveLines color="#b15a36" opacity={0.2} offset={0} sparse />
             <div style={{ fontFamily: HG, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", color: "#b15a36", marginBottom: 20, fontWeight: 500, animation: "detailUp .7s cubic-bezier(.16,1,.3,1) .05s both" }}>{cur.category} · {cur.year}</div>
             <h1 style={{ fontFamily: PF, fontWeight: 500, fontSize: "clamp(58px,10vw,180px)", lineHeight: ".92", letterSpacing: "-.01em", animation: "detailUp .9s cubic-bezier(.16,1,.3,1) .12s both" }}>{cur.title}<span style={{ fontStyle: "italic", color: "#b15a36" }}>.</span></h1>
             <p style={{ marginTop: 26, maxWidth: 560, fontFamily: PF, fontWeight: 400, fontSize: "clamp(20px,2.2vw,32px)", lineHeight: 1.3 }}>{cur.lead}</p>
@@ -557,7 +572,7 @@ export default function Home() {
           {/* GALLERY — editorial collage (varied sizes, captions, lines behind) */}
           {cur.gallery && cur.gallery.length > 0 && (
             <section className="dpanel gallery" style={{ display: "flex", alignItems: "center", gap: "3.4vw", padding: "0 9vw", height: "100vh", position: "relative" }}>
-              <WaveLines color="#b15a36" opacity={0.18} offset={120} />
+              <WaveLines color="#b15a36" opacity={0.18} offset={120} sparse />
               {cur.gallery.map((g, i) => {
                 const L = GLAYOUT[i % GLAYOUT.length];
                 const portrait = (g.o || "l") === "p";
@@ -582,7 +597,7 @@ export default function Home() {
 
           {/* PANEL 3 — narrative */}
           <section className="dpanel" style={{ flex: "0 0 64vw", height: "100vh", display: "flex", flexDirection: "column", justifyContent: "center", padding: "0 5vw", borderLeft: "1px solid rgba(28,26,22,.08)" }}>
-            <WaveLines color="#b15a36" opacity={0.22} offset={200} />
+            <WaveLines color="#b15a36" opacity={0.2} offset={200} sparse />
             <div style={{ fontFamily: HG, fontSize: 12, letterSpacing: ".16em", textTransform: "uppercase", color: "#b15a36", marginBottom: 24, fontWeight: 500 }}>O processo</div>
             <div style={{ display: "flex", flexDirection: "column", gap: 22, color: "#56514a", fontSize: "clamp(16px,1.4vw,19px)", lineHeight: 1.65, maxWidth: 680 }}>
               <p style={{ fontFamily: PF, color: "#1c1a16", fontSize: "clamp(22px,2.2vw,32px)", lineHeight: 1.3 }}>{cur.desc1}</p>
@@ -593,7 +608,7 @@ export default function Home() {
           {/* PANEL 5 — next project */}
           <section className="dpanel nextproj" data-cursor="open" onClick={() => { setOpen((o) => (o + 1) % PROJECTS.length); requestAnimationFrame(() => { const el = document.getElementById("projpanel"); if (el) el.scrollLeft = 0; }); }}
             style={{ flex: "0 0 60vw", height: "100vh", display: "flex", flexDirection: "column", justifyContent: "center", padding: "0 5vw", cursor: "pointer", borderLeft: "1px solid rgba(28,26,22,.08)" }}>
-            <WaveLines color="#b15a36" opacity={0.2} offset={360} />
+            <WaveLines color="#b15a36" opacity={0.2} offset={360} sparse />
             <div style={{ fontFamily: HG, fontSize: 12, letterSpacing: ".14em", textTransform: "uppercase", color: "#8a8377", marginBottom: 18 }}>Próxima peça</div>
             <div style={{ fontFamily: PF, fontWeight: 500, fontSize: "clamp(48px,8vw,140px)", lineHeight: ".95" }}>{nextTitle}</div>
             <div style={{ marginTop: 28, display: "inline-flex", alignItems: "center", gap: 14, fontFamily: HG, fontSize: 14 }}>Ver peça <span style={{ display: "inline-flex", width: 40, height: 40, borderRadius: "50%", background: "#1c1a16", color: "#f3efe6", alignItems: "center", justifyContent: "center" }}><Arrow s={16} dir="r" /></span></div>
