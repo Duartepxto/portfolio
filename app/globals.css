@@ -1,0 +1,341 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #f3efe6;
+  overflow-x: hidden;
+  font-family: "Hanken Grotesk", sans-serif;
+}
+
+::selection {
+  background: #b15a36;
+  color: #f3efe6;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+@keyframes loaderOut {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+@keyframes barGrow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes detailUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes detailWipe {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* hover helpers (DC style-hover equivalents) */
+.social-link {
+  color: #c9c4b8;
+  transition: color 0.3s ease;
+}
+.social-link:hover {
+  color: #fff;
+}
+.nextproj {
+  transition: background 0.3s ease;
+}
+.nextproj:hover {
+  background: #efe9dd;
+}
+.detailimg-inner {
+  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.detailimg:hover .detailimg-inner {
+  transform: scale(1.04);
+}
+
+/* project detail overlay — horizontal scroller */
+#projpanel {
+  scrollbar-width: none;
+  animation: overlayIn 0.5s ease both;
+}
+#projpanel::-webkit-scrollbar {
+  display: none;
+}
+.dpanel {
+  flex-shrink: 0;
+  position: relative;
+  isolation: isolate;
+}
+@keyframes overlayIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* gallery photos — editorial wipe + zoom reveal */
+.gshot {
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: clip-path;
+}
+.gshot.in {
+  clip-path: inset(0 0 0 0);
+}
+.gshot-img {
+  transform: scale(1.22);
+  transition: transform 1.3s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+.gshot.in .gshot-img {
+  transform: scale(1);
+}
+
+/* ---------- FILM GRAIN ---------- */
+#grain {
+  position: fixed;
+  inset: -14%;
+  width: 128%;
+  height: 128%;
+  z-index: 106;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.62' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 1.6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  opacity: 0.14;
+  animation: grain 0.45s steps(5) infinite;
+}
+
+/* ---------- WAVY LINES (single fixed accent texture) ---------- */
+/* each panel is its own stacking context so the wavy lines (z-index:-1)
+   sit above the panel's background colour but behind its content */
+#track > section {
+  isolation: isolate;
+}
+.waves {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+}
+.waves path {
+  fill: none;
+  stroke-width: 1.4;
+  vector-effect: non-scaling-stroke;
+}
+.wave {
+  transform-origin: center;
+  will-change: transform;
+}
+.wave1 { animation: waveA 8s ease-in-out infinite; }
+.wave2 { animation: waveB 11s ease-in-out infinite; }
+.wave3 { animation: waveC 14s ease-in-out infinite; }
+@keyframes waveA {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-75px, 42px); }
+}
+@keyframes waveB {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(64px, -46px); }
+}
+@keyframes waveC {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-50px, -34px); }
+}
+@keyframes grain {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-6%, 5%); }
+  40% { transform: translate(5%, -6%); }
+  60% { transform: translate(-4%, -5%); }
+  80% { transform: translate(6%, 4%); }
+  100% { transform: translate(0, 0); }
+}
+
+/* ---------- LOADER (curtain reveal) ---------- */
+#loader {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  pointer-events: none;
+}
+.loader-cols {
+  position: absolute;
+  inset: 0;
+  display: flex;
+}
+.loader-col {
+  flex: 1;
+  height: 100%;
+  background: #f3efe6;
+  transform: translateY(0);
+  animation: colUp 1s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+}
+@keyframes colUp {
+  to { transform: translateY(-100.5%); }
+}
+.loader-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  animation: loaderContentOut 0.6s cubic-bezier(0.7, 0, 0.3, 1) 1.55s forwards;
+}
+@keyframes loaderContentOut {
+  to { opacity: 0; transform: translateY(-34px); }
+}
+.loader-over span,
+.loader-sub span {
+  display: inline-block;
+  font-family: "Hanken Grotesk", sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #8a8377;
+  opacity: 0;
+  transform: translateY(18px);
+  animation: loaderFade 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.loader-over span { animation-delay: 0.15s; }
+.loader-sub span { animation-delay: 0.9s; }
+@keyframes loaderFade {
+  to { opacity: 1; transform: translateY(0); }
+}
+.loader-name {
+  font-weight: 500;
+  line-height: 0.88;
+  letter-spacing: -0.01em;
+  font-size: clamp(56px, 11vw, 180px);
+  margin: 20px 0 4px;
+}
+.lmask {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.04em;
+}
+.lline {
+  display: block;
+  transform: translateY(112%);
+  animation: lineUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.lmask:nth-child(1) .lline { animation-delay: 0.25s; }
+.lmask:nth-child(2) .lline { animation-delay: 0.38s; }
+.lline-it {
+  font-style: italic;
+  font-weight: 400;
+  color: #b15a36;
+}
+@keyframes lineUp {
+  to { transform: translateY(0); }
+}
+.loader-bar {
+  width: min(340px, 60vw);
+  height: 1px;
+  background: rgba(28, 26, 22, 0.15);
+  position: relative;
+  overflow: hidden;
+  margin-top: 26px;
+}
+.loader-bar i {
+  position: absolute;
+  inset: 0;
+  background: #b15a36;
+  transform-origin: left;
+  transform: scaleX(0);
+  animation: barFill 1.25s cubic-bezier(0.7, 0, 0.3, 1) 0.4s forwards;
+}
+@keyframes barFill {
+  to { transform: scaleX(1); }
+}
+
+@media (max-width: 768px) {
+  #cursor { display: none !important; }
+  #grain { opacity: 0.28; }
+  #bgword { display: none !important; }
+  .hbar,
+  .deslize-hint,
+  .deco { display: none !important; }
+
+  /* ---- main page: vertical stack instead of horizontal track ---- */
+  #wrap { height: auto !important; }
+  .viewport { position: static !important; overflow: visible !important; height: auto; }
+  #track { flex-direction: column; width: 100%; height: auto; transform: none !important; }
+  #track > section {
+    flex: none !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: auto !important;
+    padding: 15vh 8vw 11vh !important;
+    border-left: none !important;
+    justify-content: center;
+  }
+  #track > section + section { border-top: 1px solid rgba(28, 26, 22, 0.1); }
+
+  /* hero footer rows back into flow */
+  .hero-foot {
+    position: static !important;
+    left: auto !important; right: auto !important; bottom: auto !important;
+    margin-top: 6vh; text-align: left !important; justify-content: flex-start;
+  }
+  .hero-foot--right { gap: 26px !important; flex-wrap: wrap; }
+
+  /* Sobre -> column with a big photo */
+  .sobre-row { flex-direction: column !important; align-items: flex-start !important; gap: 30px !important; }
+  .sobre-photo { flex: none !important; width: 74% !important; max-width: 320px; }
+
+  /* project rows -> column, full-width cover */
+  .proj-row { flex-direction: column !important; gap: 24px !important; padding: 0 !important; }
+  .proj-row .cover-wrap { flex: none !important; width: 100% !important; }
+
+  /* ---- project overlay: vertical stack ---- */
+  #projpanel { flex-direction: column; overflow-x: hidden !important; overflow-y: auto !important; }
+  #projpanel > section.dpanel {
+    flex: none !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: auto !important;
+    padding: 15vh 8vw 9vh !important;
+    border-left: none !important;
+  }
+  #projpanel > section.dpanel + section.dpanel { border-top: 1px solid rgba(28, 26, 22, 0.08); }
+
+  /* gallery -> horizontal swipe strip inside the vertical overlay */
+  .gallery {
+    height: auto !important;
+    overflow-x: auto;
+    overflow-y: hidden;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    padding: 5vh 8vw !important;
+    gap: 4vw !important;
+    -webkit-overflow-scrolling: touch;
+  }
+  .gallery .gitem { transform: none !important; }
+  .gallery .gshot { height: 42vh !important; }
+}
